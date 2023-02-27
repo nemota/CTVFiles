@@ -43,6 +43,7 @@ ______________
 
 // ***** API activation control ***** //
 
+//ロードに時間がかかり過ぎたらエラー文を出す
 START = new Date().getTime();
 setTimeout(function () {
 	if (typeof LOADED === "undefined") {
@@ -56,6 +57,7 @@ setTimeout(function () {
 // Reload after unexpected site error (if API was already loaded), to prevent duplication of the elements
 // It fixes also incompability with enabled "Chat Only" layout
 
+//既に別のスクリプトが読み込まれていたらリロードなど
 if (typeof LOADED !== "undefined" || $("body").hasClass('chatOnly')) document.location.reload();
 
 
@@ -95,6 +97,8 @@ For advanced admins (own hosting required). Absolutely DO NOT DELETE any given v
 # ExternalScriptURL	| URL of an optional, additional external JavaScript file
 */
 
+//表示に使う諸々の物の設定
+
 FaviconURL = 'https://cytube.xyz/up/src/up9973.png'; //+
 
 ChannelName = 'CTV☆';
@@ -126,6 +130,7 @@ CustomTitleCaption = '';
 
 CustomFooterHTML = '';
 
+//!askの返答
 AnswersArray = ['そうだね', '駄目です', 'あのさぁ…イワナ、書かなかった？', 'お前、adminを便利屋かなんかと勘違いしちゃいないか？', '幻想郷は全てを受け入れるのよ。それはそれは残酷な話ですわ。',
 	'あたりまえよ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！', 'なによ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！',
 	'実況サボってする質問は楽しいですかぁ？ もみじなら楽しめないかなぁ・・・もみじねぇ、前からCTV民のことウザかったんだよねぇ・・・まともに実況出来ないくせに必死に語録使って雑談ばっかりベラベラベラベラベラベラ　見てるだけでもイライラするし、これ以上生きててほしくないんだけどｗ',
@@ -133,8 +138,10 @@ AnswersArray = ['そうだね', '駄目です', 'あのさぁ…イワナ、書�
 	'てめえはママのおっぱいでも吸って寝てな！', 'あたし不器用だから…　抱きしめてあげるくらいしかできないんだ', '・・・・・・そうではない。', 'https://dl.dropbox.com/s/atui54zdlod1siy/SAIKYOU.jpg', 'https://dl.dropbox.com/s/9qvopdxp6z67hgc/1573733533698.png'
 ];
 
+//!fortuneの返答
 FortunesArray = ['up18640.gif', 'up18641.gif', 'up18642.gif', 'up18643.gif', 'up18644.gif', 'up18645.gif', 'up18646.gif', 'up18647.gif'];
 
+//音声エモート
 SoundFiltersArray = {
 	'114514': 'https://dl.dropbox.com/s/uyeq6gi73x703qf/%E3%81%84%E3%81%84%E3%82%88%EF%BC%81%E3%81%93%E3%81%84%E3%82%88%EF%BC%81.wav?dl=0',
 };
@@ -224,6 +231,7 @@ _SHOWELEMENTS = '{"header":1,"logo":1,"motd":1,"announcements":1,"mainheader":1,
 	'"chatmenus":1,"plmeta":1,"playlistlabels":1,"footer":1}';
 
 // Get and set global variables stored in localStorage/cookies, or set default values
+//クッキー☆に保存されている情報を取り出す
 
 BIGPROFILES = getOrDefault('SP_bigprofiles', false);
 CHATBG = getOrDefault('SP_chatbg', '');
@@ -340,7 +348,7 @@ CHATMENTIONS = [];
 CHATMSGNUM = 0;
 CHATUNRNUM = 0;
 COMMAND = false;
-COMMANDSTSTAMPS = {};
+COMMANDSTSTAMPS = [];//{}になっていたけどたぶんこれが正解
 HIDDENPLR = false;
 HIDDENVWRAP = false;
 LASTPLAYED = [];
@@ -395,7 +403,9 @@ ColorsArray = [
 	'turquoise', 'palegreen', 'khaki', 'salmon', 'mediumpurple',
 ];
 
-CommondsArray = {
+//CTV独自拡張含む　チャットに使えるコマンドの例示のHTML　メモ:変数名変更: CommondsArray→CommandsArray
+//ここに書かれているコマンドはチャットフィルタから使うことができる(ことになっていそう)
+CommandsArray = {
 	'yu': '<span style="font-size:10px;color:#FFFFFF; font-family:HG創英角ﾎﾟｯﾌﾟ体,sans-serif;text-shadow:0px 0px 4px #000000,0px 0px 4px #000000,0px 0px 4px #000000">じゃあな！</span>',
 	'an': '<span style="font-size:10px;color:#18E0FF; font-family:Fuwafude,sans-serif;text-shadow:3px 3px 1px #000000,-3px 3px 1px #000000,3px -3px 1px #000000,-3px -3px 1px #000000,3px 0px 1px #000000,0px 3px 1px #000000,-3px 0px 1px #000000,0px -3px 1px #000000">おはさく</span>',
 	'd': '<span class="dist">目立</span>',
@@ -426,6 +436,9 @@ CommondsArray = {
 	'bw': '<span style="color:white; background-color:black">白黒</span>',
 };
 
+//CTV独自拡張含む　コマンドたち　変数名変更予定
+//ここに書かれているコマンドはチャットフィルタから使うことができる(ことになっていそう)
+//メモ:一部動作しない
 ComandoArray = {
 
 	'@': '<span style="display:inline-block;transform:rotateY(180deg)">R</span>',
@@ -452,6 +465,7 @@ ComandoArray = {
 
 // Lists for "Unicode Charaters" menu option, '|' character will make a new line for tables of symbols and letters
 // Emoji are displayed automatically by 5 in a row
+// Unicode Charatersっていうメニュー内のもののリスト
 
 UnicodeSymbolsArray = [
 	'←', '→', '↓', '↑', '↖', '↗', '↘', '↙', '↔', '↕', '⇦', '⇨', '⇩', '⇧', '⇒', '↵', '|',
@@ -481,7 +495,7 @@ UnicodeEmojiArray = [
 ];
 
 // Additional layout themes/skins
-
+//背景テーマのCSS
 ThemesArray = [
 	['Cosmos', DROPBOX + 'w75q2eqcj6p7cz4/cosmos.css'],
 	['DarkCells', DROPBOX + 'd6esvco1v8iu7ir/darkcells.css'],
@@ -517,7 +531,7 @@ FontsArray = [
 ];
 
 // Buffer frequently used DOM elements
-
+//よく使うDOM要素を変数として保持しておく
 $body = $("body");
 $nav = $("nav");
 $chatwrap = $("#chatwrap");
@@ -561,6 +575,7 @@ $plmeta = $("#plmeta");
 
 // Add personal chat notification
 
+//チャットにシステムメッセージを出すもの
 function addChatNotification(html) {
 	setTimeout(function () {
 		$('<div class="chat-msg- serverinfo"><span class="action scriptanswer">▮ ' + html + '</span></div>')
@@ -570,13 +585,13 @@ function addChatNotification(html) {
 }
 
 // Change specific MOTD element after load
-
+// メモ:よくわからん
 function alterMOTD() {
 	if (MOTDAlteredElement != "" && MOTDAlteredHTML != "") $("#" + MOTDAlteredElement).html(MOTDAlteredHTML);
 }
 
 // Check if chat commands were abused
-
+// コマンドが多く使われ過ぎていたら注意する(メモ:これいる？)
 function checkCommandsAbuse() {
 	var time = new Date().getTime();
 	if (COMMANDSTSTAMPS.length > 4) {
@@ -590,14 +605,15 @@ function checkCommandsAbuse() {
 }
 
 // Create all user profile images panel
-
+// メモ:よくわからん
 function createAvatarsPanel() {
 	$avatarswrap = $('<div id="avatarswrap" class="col-lg-12 col-md-12 leftareas" />').insertAfter($notepadwrap);
 	$avatarspanel = $('<div id="avatarspanel" class="well" />').appendTo($avatarswrap);
 }
 
 // Create panel of favourite media links
-
+// お気に入りの動画を保存しておく機能　左にある側のサムズアップボタンから使える
+// youtubeの動画の場合、登録したリストからプレビューも可能
 function createFavsPanel() {
 	var html = '';
 	FAVSORTMODE = getOrDefault('SP_favsortmode', 'old');
@@ -662,7 +678,7 @@ function createFavsPanel() {
 }
 
 // Create Media Database panel
-
+// メモ:よくわからん　Media Databaseってどれのことだよ
 function createMediaDatabase() {
 	var num = 0;
 	var item = 0;
@@ -702,7 +718,7 @@ function createMediaDatabase() {
 }
 
 // Create new modal window with selected title
-
+// モーダルウィンドウを生成するやつ　エモートリストのウィンドウとかはこれで作られてるみたい
 function createModal(title) {
 	outer = $('<div class="modal fade" />').appendTo($body).modal()
 		.on("hidden.bs.modal", function () {
@@ -723,7 +739,7 @@ function createModal(title) {
 }
 
 // Create switchable tabs in modal window
-
+// モーダルの中にタブを作るためのものっぽいけど用例がない
 function createModalTabs(arr, mw) {
 	var group = $('<div class="group-modal btn-group" />').appendTo(body);
 	var len = arr.length;
@@ -746,7 +762,7 @@ function createModalTabs(arr, mw) {
 }
 
 // Delete given element from array
-
+// 配列から要素を消すための小道具　現在地
 function deleteFromArray(arr, el) {
 	delete(arr[el]);
 	var _arr = [];
@@ -757,7 +773,7 @@ function deleteFromArray(arr, el) {
 }
 
 // Enhance emotes displaying
-
+// エモートをクリックしたときチャットに挿入されるようにする　その設定はチャット送信時に行われている($messagebuffer.find("div").each～のところ)
 function enhanceEmotes(elem) {
 	elem.find("img.channel-emote").each(function () {
 		$(this).attr('onClick', 'insertText("' + $(this).attr("title") + ' ")');
@@ -765,93 +781,93 @@ function enhanceEmotes(elem) {
 }
 
 // Execute chat text effects
-
+//チャットの文字装飾(色や太字など)が設定された部分のHTMLを設定
 function execTextEffects(html) {
-	html = html.replace(/col:(.*?):/g, '<span style="color:$1" class="chatcolor">');
+	html = html.replace(/col:(.*?):/g, '<span style="color:$1" class="chatcolor">');//col:(色):(ここに色がつく)
 	TextFiltersArray = [{
 			before: /:\+(.+?)\+:/g,
-			after: '<span style="font-weight:bold" class="txteffect">$1</span>'
+			after: '<span style="font-weight:bold" class="txteffect">$1</span>'//:+(ここが太字になる)+:
 		},
 		{
 			before: /:=(.+?)=:/g,
-			after: '<span style="font-style:italic" class="txteffect">$1</span>'
+			after: '<span style="font-style:italic" class="txteffect">$1</span>'//:=(ここが斜体になる)=:
 		},
 		{
 			before: /:@@(.+?)@@:/g,
-			after: '<span style="border-bottom:dotted 1px" class="txteffect">$1</span>'
+			after: '<span style="border-bottom:dotted 1px" class="txteffect">$1</span>'//:@@(ここに点線の下線が引かれる)@@:
 		},
 		{
 			before: /:@(.+?)@:/g,
-			after: '<span style="text-decoration:underline" class="txteffect">$1</span>'
+			after: '<span style="text-decoration:underline" class="txteffect">$1</span>'//:@(ここに実線の下線が引かれる)@:
 		},
 		{
 			before: /:-(.+?)-:/g,
-			after: '<span class="txteffect"><s>$1</s></span>'
+			after: '<span class="txteffect"><s>$1</s></span>'//:-(ここに取り消し線が引かれる)-:
 		},
 		{
 			before: /:!(.+?)!:/g,
-			after: '<span style="font-size:0.8em" class="txteffect">$1</span>'
+			after: '<span style="font-size:0.8em" class="txteffect">$1</span>'//:!(ここの文字サイズが0.8倍になる)!:
 		},
 		{
 			before: /:\$(.+?)\$:/g,
-			after: '<span style="font-variant:small-caps" class="txteffect">$1</span>'
+			after: '<span style="font-variant:small-caps" class="txteffect">$1</span>'//:$(ここのアルファベットがスモールキャップ(小さな大文字)になる)$:
 		},
 		{
 			before: /:%(.+?)%:/g,
-			after: '<span style="letter-spacing:2px" class="txteffect">$1</span>'
+			after: '<span style="letter-spacing:2px" class="txteffect">$1</span>'//:%(ここの文字間隔が広くなる)%:
 		},
 		{
 			before: /:#(.+?)#:/g,
 			after: '<span style="font-family:Menlo,Monaco,Consolas,\'Courier New\',' +
-				'monospace" class="txteffect">$1</span>'
+				'monospace" class="txteffect">$1</span>'//:#(ここのフォントが変わる)#:
 		},
 		{
 			before: /:\^(.+?)\^:/g,
 			after: '<span style="outline:1px dashed #98ABB9; outline-offset:-5px; background-color:#556068; ' +
 				'box-shadow:2px 2px 2px #000; padding:5px; border-radius:2px; color:#EEE" class="txteffect">' +
-				'$1</span>'
+				'$1</span>'//:^(ここが変なやり方で強調される)^:
 		},
 		{
 			before: /:\/\/(.+?)\/\/:/g,
-			after: '<marquee behavior="scroll" scrollamount="18" class="txteffect">$1</marquee>'
+			after: '<marquee behavior="scroll" scrollamount="18" class="txteffect">$1</marquee>'//://(ここが左へ流れていく)//:
 		},
 		{
 			before: /:\/(.+?)\/:/g,
-			after: '<marquee behavior="alternate" scrollamount="15" class="txteffect">$1</marquee>'
+			after: '<marquee behavior="alternate" scrollamount="15" class="txteffect">$1</marquee>'//:/(ここが往復する)/:
 		},
 		{
 			before: /\[b\](.+?)\[\/b\]/g,
-			after: '<span style="font-weight:bold" class="txteffect">$1</span>'
+			after: '<span style="font-weight:bold" class="txteffect">$1</span>'//[b](ここが太字になる)[/b]
 		},
 		{
 			before: /\[i\](.+?)\[\/i\]/g,
-			after: '<span style="font-style:italic" class="txteffect">$1</span>'
+			after: '<span style="font-style:italic" class="txteffect">$1</span>'//[i](ここが斜体になる)[/i]
 		},
 		{
 			before: /\[u\](.+?)\[\/u\]/g,
-			after: '<span style="text-decoration:underline" class="txteffect">$1</span>'
+			after: '<span style="text-decoration:underline" class="txteffect">$1</span>'//[u](ここに実線の下線が引かれる)[/u]
 		},
 		{
 			before: /\[s\](.+?)\[\/s\]/g,
-			after: '<span class="txteffect"><s>$1</s></span>'
+			after: '<span class="txteffect"><s>$1</s></span>'//[s](ここに取り消し線が引かれる)[/s]
 		},
 		{
 			before: /\[code\](.*?)\[\/code\]/g,
-			after: '<code>$1</code>'
+			after: '<code>$1</code>'//[code](ここがソースコード風になる)[/code]
 		}
 	];
-	for (i in TextFiltersArray) html = html.replace(TextFiltersArray[i].before, TextFiltersArray[i].after);
+	for (i in TextFiltersArray) html = html.replace(TextFiltersArray[i].before, TextFiltersArray[i].after);//置換リストをもとに置換
 	return html;
 }
 
 // Fix "#mainpage" padding-top if navigation bar has non-standard height
-
+// なんかレイアウトを調整するっぽい
 function fixMainPadding() {
 	$("#mainpage").css('padding-top', ($nav.outerHeight() + 8) + 'px');
 }
 
 // Raw list of links from the playlist
-
+// 現在地
 function formatRawList() {
 	var list = [];
 	$queue.find("li").each(function () {
@@ -1047,7 +1063,7 @@ function insertChatCode(t1, t2) {
 }
 
 // Insert selected text to chatline
-
+// チャットにテキストを挿入する関数たち　メモ:便利そう
 function insertText(str) {
 	$chatline.val($chatline.val() + str).focus();
 }
@@ -1206,7 +1222,7 @@ function prepareMediaDBHelp() {
 }
 
 // Preview YT video
-
+// youtubeのビデオをプレビューできる　お気に入りリストと、MediaDatabaseからできるっぽい
 function previewVideo(id) {
 	createModal('Preview video');
 	var player = $('<iframe id="previewFrame" width="500" height="281" frameborder="0" />').appendTo(body)
@@ -2681,16 +2697,16 @@ var html = '<button id="commonds-btn" class="btn btn-sm btn-default btn-chatctrl
 	'<ul id="commonds-wrap" class="dropdown-menu centered"></ul>';
 $commondsMenu = $('<div id="commonds-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
 
-if (CommondsArray.length < 1) $commondsMenu.hide()
-else if (CommondsArray.length > 50) $commondsMenu.addClass('widecm');
+if (CommandsArray.length < 1) $commondsMenu.hide()
+else if (CommandsArray.length > 50) $commondsMenu.addClass('widecm');
 
-var commonds_arr = Object.keys(CommondsArray);
+var commonds_arr = Object.keys(CommandsArray);
 
 for (i in commonds_arr) {
 	var c = commonds_arr[i];
 	var j = commonds_arr.length > 50 ? 8 : 1;
 	if (i % j == 0) var commondgroup = $('<li class="btn-group btn-commonds" />').appendTo("#commonds-wrap");
-	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'[' + commonds_arr[i] + ']\')" />').appendTo(commondgroup).html(CommondsArray[c]);
+	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'[' + commonds_arr[i] + ']\')" />').appendTo(commondgroup).html(CommandsArray[c]);
 }
 
 // Chat comando button and menu
