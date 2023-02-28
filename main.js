@@ -867,7 +867,7 @@ function fixMainPadding() {
 }
 
 // Raw list of links from the playlist
-// 現在地
+// プレイリスト内の動画URLをコンマ区切りで繋げた文字列を生成する
 function formatRawList() {
 	var list = [];
 	$queue.find("li").each(function () {
@@ -877,7 +877,7 @@ function formatRawList() {
 }
 
 // Get current time of playing media
-
+// 現在の動画位置を取得する
 function getTimePos() {
 	if (PLAYER && PLAYER.yt && PLAYER.yt.getCurrentTime) return PLAYER.yt.getCurrentTime()
 	else if (PLAYER && PLAYER.dm && PLAYER.dm.currentTime) return PLAYER.dm.currentTime
@@ -886,12 +886,14 @@ function getTimePos() {
 			if (PLAYER.soundcloud) PLAYER.soundcloud.currentTime = t / 1000;
 		});
 		if (PLAYER.soundcloud) return PLAYER.soundcloud.currentTime;
+	} else if(PLAYER.nico){
+		PLAYER.nico.state.currentTime / 1000;//CTV独自拡張:niconicoに対応
 	} else if (PLAYER && PLAYER.player && PLAYER.player.currentTime) return PLAYER.player.currentTime()
 	else return -0.01;
 }
 
 // Get variable from URL of an external JS file
-
+// メモ:よくわからん　この関数が"db"を返すとmediadatabaseあたりで何かが起きるっぽい
 function getURLVar(v) {
 	var link = CHANNEL.opts.externaljs.split("?");
 	if (link.length < 2) return '';
@@ -904,7 +906,7 @@ function getURLVar(v) {
 }
 
 // Game "guess a number"
-
+// 数当てゲーム(!game コマンドで起動)
 function guessNumber() {
 	var rnd = Math.floor(Math.random() * 1000) + 1;
 	var ans = 0;
@@ -933,7 +935,7 @@ function guessNumber() {
 }
 
 // Handle behaviour after connection or log in
-
+// チャット履歴(アカウント→チャット履歴　で見られるやつ)の保存関連の処理
 function handleLogin() {
 	CHATHISTORY = getOrDefault('SP_chathistory_' + CLIENT.name, '{}');
 	var obj = JSON.parse(CHATHISTORY);
@@ -955,10 +957,11 @@ function handleLogin() {
 }
 
 // Handle various options after media change
-
+// 動画が変わった後の処理諸々
 function handleMediaChange() {
-	if ($queue.find(".queue_entry").length > 0) {
+	if ($queue.find(".queue_entry").length > 0) {//次の動画が存在する場合
 		var uid = $(".queue_active").data("media");
+		//「再生中の動画をダウンロード」機能のリンクを更新
 		if (['yt', 'vi', 'sc', 'gd', 'fi'].indexOf(uid.type) > -1 && uid.duration != "00:00") {
 			$("#pls-3").show();
 			var arr = {
@@ -975,6 +978,7 @@ function handleMediaChange() {
 			else if (uid.type == "gd") $("#pls-3").attr('href', link)
 			else if (uid.type == "fi") $("#pls-3").attr('href', link);
 		} else $("#pls-3").hide();
+		//再生された動画の履歴(歯車→再生・投稿履歴　から見られるやつ)を更新
 		var link = formatURL(uid);
 		if (LASTPLAYED.length < 1 || LASTPLAYED[LASTPLAYED.length - 1]["link"] != link) {
 			LASTPLAYED.push({
@@ -999,17 +1003,19 @@ function handleMediaChange() {
 			setOpt('SP_playerhistory_' + CLIENT.name, PLAYERHISTORY = JSON.stringify(obj));
 		}
 		if (TABMODE == 1) pageTitle();
-	} else {
+	} else {//次の動画がない場合ダウンロードボタンを消す
 		$("#pls-3").hide();
 		if (TABMODE == 1) pageTitle();
 	}
+	//再生中動画タイトルの書き方に独自設定があれば適用する CTV独自拡張:日本語表示に対応
 	if (CustomTitleCaption != "") {
-		$currenttitle.html($currenttitle.html().replace('Currently Playing:', CustomTitleCaption));
+		$currenttitle.html($currenttitle.html().replace('Currently Playing:', CustomTitleCaption).replace("再生中:", CustomTitleCaption));
 	}
 	if ($videowrapHeader.hasClass('pbar')) {
 		$videowrapHeader.css('background-size', '0% 100%');
 		PREVTIME = 0;
 	}
+	//「次の動画までプレイヤーを隠す」にしていた場合、それを解除
 	if (HIDDENPLR) {
 		$("#hidden-plr").remove();
 		$videowrapHeader.show();
@@ -1017,7 +1023,8 @@ function handleMediaChange() {
 		$("#plr-1").removeClass('activated');
 		HIDDENPLR = false;
 	}
-	(NOPLAYER || LARGEPLAYER) ? $("#plr-13").hide(): $("#plr-13").show();
+	(NOPLAYER || LARGEPLAYER) ? $("#plr-13").hide(): $("#plr-13").show();//メモ:よくわからん
+	//新しく再生する動画がすでにお気に入りに含まれているかどうかで、お気に入りメニューの表示を変える
 	FAVLINKS = getOrDefault('SP_favlinks_' + CLIENT.name, '[]');
 	if ($queue.find(".queue_entry").length > 0 && FAVLINKS.indexOf(link) > -1) {
 		$favsBtn.addClass('btn-success');
@@ -1030,7 +1037,7 @@ function handleMediaChange() {
 }
 
 // Handle elements dependable on user rank
-
+// モデレーター以上の場合、管理者向けのボタン群を表示(自分をリーダーにする権・稲妻を押すと出てくる中の、チャットクリアとチャットオートクリア)
 function handleRank() {
 	CLIENT.rank > 2 ? $("#tools-btn, #autoclear-btn").show() : $("#tools-btn, #autoclear-btn").hide();
 	hasPermission("chatclear") ? $("#clear-btn").show() : $("#clear-btn").hide();
@@ -1042,7 +1049,7 @@ function handleRank() {
 }
 
 // Hide chat emotes
-
+// エモートを無視する設定の場合、エモートを、それを表す文字列に変換する
 function hideEmotes(elem) {
 	elem.find("img.channel-emote").each(function () {
 		var span = $('<span class="span-emote">').attr('link', $(this).attr('src'))
@@ -1052,7 +1059,7 @@ function hideEmotes(elem) {
 }
 
 // Insert and wrap code around selected text in chatline
-
+// チャットに文字列を挿入する(選択範囲の直前にt1、直後にt2を入れる　コマンドを挿入することを想定？)
 function insertChatCode(t1, t2) {
 	var l = document.getElementById("chatline");
 	var a = l.selectionStart;
@@ -1063,7 +1070,7 @@ function insertChatCode(t1, t2) {
 }
 
 // Insert selected text to chatline
-// チャットにテキストを挿入する関数たち　メモ:便利そう
+// チャット欄先頭/最後尾にテキストを挿入する関数たち　メモ:便利そう
 function insertText(str) {
 	$chatline.val($chatline.val() + str).focus();
 }
@@ -1077,7 +1084,7 @@ function insertBothText(str1, str2) {
 }
 
 // Load external Media Database
-
+// MediaDatabaseをロードするらしい　メモ:よくわからん
 function loadDatabase(link) {
 	var div = $('<div class="centered" />').html('Loading external Media Database...').appendTo($dbwell);
 	setTimeout(function () {
@@ -1109,7 +1116,7 @@ function loadDatabase(link) {
 }
 
 // Show media current time when full-width title bar is enabled
-
+// full-width title bar(歯車→full-width title bar　でなるやつ)を使っているとき、動画の時刻を表示
 function mediaClock() {
 	var time = (!PLAYER || PLAYER.mediaType === undefined) ? -1 : getTimePos();
 	var pos = "--:--";
@@ -1124,14 +1131,14 @@ function mediaClock() {
 }
 
 // Add premium info after media change
-
+// 新しい動画が流れるときにチャットでお知らせ
 function nowPlaying() {
 	if (PREMIUMNOTMODE < 3) return;
 	if (NowPlaying == "") NowPlaying = 'Now playing';
 	if (hasPermission("seeplaylist")) {
 		var uid = $(".queue_active").data("media");
 		var html = NowPlaying + ': ' + uid.title + ' [' + uid.duration + ']';
-		if ($favsBtn.hasClass('btn-success')) html += ' <span class="glyphicon glyphicon-thumbs-up"></span>';
+		if ($favsBtn.hasClass('btn-success')) html += ' <span class="glyphicon glyphicon-thumbs-up"></span>';//お気に入りにしてあるのなら、チャットでのお知らせの最後にサムズアップマークをつける
 	} else if (PLAYER) {
 		var html = NowPlaying + ': ';
 		if (CustomTitleCaption != "") html += $("#currenttitle").html().replace(CustomTitleCaption, "")
@@ -1142,13 +1149,14 @@ function nowPlaying() {
 }
 
 // Update user online time
-
+// 一分ごとに、連続接続時間(単位は分)を表す変数を増やす　ONLINETIMEは!statコマンドの出力に利用される
 function onlineTime() {
 	ONLINETIME++;
 }
 
 // Page title
-
+// ブラウザタブタイトルの形式の設定に応じて、タイトル文字列を更新
+// 設定は、プレミアム設定→Advanced→Browser's tab title　からできるやつ
 function pageTitle() {
 	var title;
 	if (TABMODE == 0) title = CHANNEL.opts.pagetitle
@@ -1174,14 +1182,15 @@ function pageTitle() {
 }
 
 // Paste link to "Add video from URL" input
-
+// リンクから動画を追加するときの入力欄に引数を貼り付ける　そのとき、追加メニューが開かれていなければ開く
+// お気に入り動画リストや、List of Last Mediaにある、追加のためのボタンからアクセスされる
 function pasteLink(url) {
 	if (!$("#showmediaurl").hasClass('active')) document.getElementById("showmediaurl").click();
 	$("#mediaurl").val(url);
 }
 
 // Chat messages on player (NicoNico mode)
-
+// ニコニコのコメントのように、文字列textを流して表示する関数
 function playerText(text, classes) {
 	if (!PLAYERTEXT || !$("#ytapiplayer")[0]) return;
 	if (text !== null && typeof text === "string" && text.length > 0 && !(/^\$/.test(text))) {
@@ -1206,7 +1215,7 @@ function playerText(text, classes) {
 }
 
 // Media DB help message
-
+// MediaDatabaseのところにある説明文を生成してそう
 function prepareMediaDBHelp() {
 	return '<code>MediaDatabase = [</code><br />' +
 		'<code>[\'\', \'Category name\'],</code><br />' +
@@ -1243,10 +1252,12 @@ function previewVideo(id) {
 }
 
 // Process channel CSS
-
+// メモ:存在意義はなんなのだろうか　あとでまた見る
 function processChannelCSS(bool) {
 	if (bool == true) {
+		//チャンネルCSS(設定欄にコードを書き込むやつ)の適用
 		if (CHANCSS != "") $('<style id="chancss" type="text/css">' + CHANCSS + '</style>').appendTo("head");
+		//拡張CSS(ファイルのURLを貼るやつ)を適用
 		if (CHANEXTERNALCSS != "") {
 			$('<link id="chanexternalcss" href="' + CHANEXTERNALCSS + '" rel="stylesheet" />')
 				.appendTo("head");
@@ -1262,7 +1273,8 @@ function processChannelCSS(bool) {
 }
 
 // Process various layout elements
-
+// SHOWELEMENTSにおいて隠すように設定されている要素を隠す
+// 隠す要素の設定は、レイアウト→プレミアム設定→表示/非表示　にあるもの
 function processLayoutElements() {
 	var arr = JSON.parse(SHOWELEMENTS);
 	var ids = {
@@ -2391,7 +2403,6 @@ var html = '<li><a id="layout-1">Premium Settings</a></li>' +
 $layoutMenu = $('#nav-collapsible a[onclick*="chatOnly"]').parent().parent().addClass('noclose').html(html)
 	.parent().find("> a").prepend('<span class="glyphicon glyphicon-cog nav-cog layout-cog" />')
 	.parent().addClass('layout-menu');
-
 
 // Mentions indicator
 
@@ -7998,7 +8009,7 @@ if (EMOTESCACHE) {
 	function setPlayer() {
 		if (PLAYER.yt) {
 			kindOfPlayer = "YouTube";
-		} else if (PLAYER.state) {
+		} else if (PLAYER.nico) {
 			kindOfPlayer = "niconico";
 		} else if (PLAYER.dm) {
 			kindOfPlayer = "Dailymotion";
@@ -8029,7 +8040,7 @@ if (EMOTESCACHE) {
 			output = PLAYER.yt.getCurrentTime();
 			break;
 		case "niconico":
-			output = PLAYER.state.currentTime / 1000;
+			output = PLAYER.nico.state.currentTime / 1000;
 			break;
 		case "Dailymotion":
 			output = PLAYER.dm.currentTime;
@@ -8255,6 +8266,9 @@ if (EMOTESCACHE) {
 		EMOTELIST.loadPage(0);
 	};
 })();
+
+//なぜかレイアウトメニューが出てこないことがあるので表示(CTV独自修正)
+$layoutMenu.css("display","inline")
 
 
 
