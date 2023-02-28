@@ -385,7 +385,7 @@ CYTUBE = 'https://cytube.xyz/up/src/';
 VERSION = '2.12.2';
 
 // Allowed link extensions that can be displayed directly on chat by a user
-
+// 画像/動画として認識する形式たち　メモ: 増やしたら使えるかも？
 ImageExtensions = 'a[href*=".jpg"], a[href*=".jpeg"], a[href*=".png"], ' +
 	'a[href*=".tiff"], a[href*=".gif"], a[href*=".svg"]';
 MediaExtensions = 'a[href*=".webm"], a[href*=".mp4"], a[href*=".mp3"], a[href*=".ogg"]';
@@ -887,7 +887,7 @@ function getTimePos() {
 		});
 		if (PLAYER.soundcloud) return PLAYER.soundcloud.currentTime;
 	} else if(PLAYER.nico){
-		PLAYER.nico.state.currentTime / 1000;//CTV独自拡張:niconicoに対応
+		return PLAYER.nico.state.currentTime / 1000;//CTV独自拡張:niconicoに対応
 	} else if (PLAYER && PLAYER.player && PLAYER.player.currentTime) return PLAYER.player.currentTime()
 	else return -0.01;
 }
@@ -1309,7 +1309,7 @@ function processLayoutElements() {
 }
 
 // Update progress bar
-
+// 動画の上のタイトルが書いてあるところの、進捗に応じた背景
 function progressBar() {
 	if (!PLAYER || PLAYER.mediaType === undefined) return;
 	var a = 0;
@@ -1320,7 +1320,7 @@ function progressBar() {
 }
 
 // Rebuild playlist miniatures
-
+// 動画サムネをリスト上に表示する奴(ミニチュア)をリロードする
 function rebuildMiniatures() {
 	if (!MINIATURES) return;
 	$queue.find(".miniature").remove();
@@ -1328,7 +1328,7 @@ function rebuildMiniatures() {
 }
 
 // Rebuild saved mentions
-
+// 自分に対する言及の保存(アカウント→メンション)を再構築するっぽい
 function rebuildSavedMentions(id) {
 	var obj = JSON.parse(MENTIONS);
 	if (id >= 0) {
@@ -1354,7 +1354,7 @@ function rebuildSavedMentions(id) {
 }
 
 // Refresh player
-
+// 動画プレイヤーを再読み込みする　動画右下の再読み込みボタンなどからアクセス
 function refreshPlayer() {
 	PLAYER.mediaType = "";
 	PLAYER.mediaId = "";
@@ -1362,7 +1362,7 @@ function refreshPlayer() {
 }
 
 // Refresh user avatars list
-
+// ユーザーが設定している画像のリスト(プレミアム設定→基本→チャット下部に全ユーザのプロフィール画像を表示　で出てくるやつ)の設定
 function refreshAvatarsList() {
 	var html = '';
 	$userlist.find(".userlist_item span:nth-child(2)").each(function () {
@@ -1381,7 +1381,7 @@ function refreshAvatarsList() {
 }
 
 // Remove selected link from favourites list
-
+// お気に入りリストのゴミ箱ボタン
 function removeFav(id) {
 	FAVLINKS = getOrDefault('SP_favlinks_' + CLIENT.name, '[]');
 	var arr = JSON.parse(FAVLINKS);
@@ -1405,7 +1405,8 @@ function removeFav(id) {
 }
 
 // Scroll chat panel to top
-
+// チャットがあるところにスクロールして、チャット入力欄にフォーカス
+// キーボードショートカットの実働部分となっているほか、レイアウトを切り替えた後の処理にも組み込まれている
 function scrollChatToTop() {
 	if ($body.hasClass('radio-mode')) {
 		window.scrollTo(0, $("#videowrap-header").offset().top);
@@ -1420,7 +1421,7 @@ function scrollChatToTop() {
 }
 
 // Set additional (font and background pattern) CSS
-
+// レイアウト→テーマ&ユーザCSS　の下の方で設定できるフォントや背景の適用
 function setAdditionalCSS() {
 	$("#additionalcss").remove();
 	var html = '';
@@ -1433,7 +1434,7 @@ function setAdditionalCSS() {
 }
 
 // Set player brightness
-
+// 再生画面下の歯車→light　から調整できる明るさの適用
 function setPlayerBrightness() {
 	if (BRIGHTNESS == 0) return;
 	$videowrap.find(".embed-responsive-16by9").append('<div id="plr-bright" class="maxwidth" />');
@@ -1443,9 +1444,9 @@ function setPlayerBrightness() {
 }
 
 // Show images directly on chat
-
+// 画像をチャットに表示
 function showImagesOnChat(elem) {
-	elem.find(ImageExtensions).each(function () {
+	elem.find(ImageExtensions).each(function () {//画像ファイルそれぞれについて処理する
 		var link = this.href;
 		var block = false;
 		if (link.indexOf("//i.imgur.com") > -1) {
@@ -1456,7 +1457,7 @@ function showImagesOnChat(elem) {
 		}
 		var img = $('<img class="embedimg" title="Click to open in a new tab" />').attr('src', this.href.replace("?oekaki", ""))
 			.load(function () {
-				if (SCROLLCHAT) scrollChat();
+				if (SCROLLCHAT) scrollChat();//ロードされたらチャットをスクロール
 			});
 		$(this).html(img).attr('href', link);
 		if (block) {
@@ -1467,7 +1468,7 @@ function showImagesOnChat(elem) {
 }
 
 // Show oekaki directly on chat
-
+// お絵描きをチャットに表示　正直上の関数との違いがわからん
 function showOekakiOnChat(elem) {
 	elem.find('a[href$="?oekaki"]').each(function () {
 		var link = this.href;
@@ -1492,7 +1493,7 @@ function showOekakiOnChat(elem) {
 }
 
 // Show videos directly on chat
-
+// ビデオ/音声をチャットに埋め込み表示
 function showVideosOnChat(elem) {
 	elem.find(MediaExtensions).each(function () {
 		var vid = $('<video class="embedvid" />').prop('loop', 'false')
@@ -1511,7 +1512,7 @@ function showVideosOnChat(elem) {
 }
 
 // Sort favourite links
-
+// お気に入りリストの並べ替え
 function sortFavs(mode) {
 	var arr = JSON.parse(getOrDefault('SP_favlinks_' + CLIENT.name, '[]'));
 	if (mode == "old") arr.sort(function (a, b) {
@@ -1531,7 +1532,7 @@ function sortFavs(mode) {
 }
 
 // Media time left on the title bar
-
+// 再生画面上に書かれる残り時間(歯車→残り時間の表示)
 function timeLeftClock() {
 	var left;
 	var time = (!PLAYER || PLAYER.mediaType === undefined) ? -1 : getTimePos();
@@ -1541,7 +1542,7 @@ function timeLeftClock() {
 }
 
 // Toggle Media Database category
-
+// メモ: MediaDatabaseに関係がありそう
 function toggleDBCategory(num) {
 	var btn = $("#cat-btn" + num);
 	if (btn.hasClass('btn-success')) $dbwell.find("#cat-ul" + num).hide()
@@ -1554,13 +1555,13 @@ function toggleDBCategory(num) {
 }
 
 // Toggle selected element
-
+// 渡された要素の表示非表示を切り替え　結構一般的な関数
 function toggleElement(div) {
 	$(div).css('display') == "none" ? $(div).show() : $(div).hide();
 }
 
 // Update media info in Radio Mode
-
+// ラジオモードにおいて、現在に再生されている動画、次に再生する動画などの情報を更新するもの(radiomode()内で3秒ごとに呼び出されてるっぽい)
 function updateQueueInfo() {
 	newplaylistheader.html($("#usercount").html());
 	var html = '';
@@ -1578,7 +1579,7 @@ function updateQueueInfo() {
 }
 
 // Display UTC time
-
+// 稲妻を押すと表示される需要不明な世界標準時
 function UTCTime() {
 	var date = new Date;
 	var html = 'UTC: ' + date.getUTCHours() + ':' +
@@ -1588,7 +1589,8 @@ function UTCTime() {
 }
 
 // Handle player volume level
-
+// 音量に応じて、消音ならプレイヤー周辺の該当するボタンを赤くしたり、ラジオモードなら音量スライダーの位置を設定したりする
+// 2秒に一回呼び出されている
 function volumeLvl() {
 	if (!PLAYER) return;
 	PLAYER.getVolume(function (vol) {
@@ -2229,6 +2231,8 @@ function queueButtons(mode) {
 	} else if (mode == "hide") $queue.addClass('nobuttons');
 }
 
+//再生画面下の歯車→Show Miniaturesがオンになっているときに、リスト内に動画サムネを表示するやつ
+//メモ: 今の所YouTubeとDailymotionしか対応していないみたいだけど頑張れば増やせるかも
 function queueMiniatures(mode) {
 	if (mode == "hide") $queue.find(".miniature").remove()
 	else if (mode == "show") {
@@ -3210,7 +3214,7 @@ $("#my-messages").on("click", function () {
 
 
 // My Mentions modal window
-
+// メンションを保存するやつ　rebuildとの役割分けがよくわからん
 $("#my-mentions").on("click", function () {
 	createModal('My Mentions');
 
@@ -6696,7 +6700,7 @@ function prepareMessage(msg) {
 
 // Improved chat autoscroll
 // source" "/www/js/util.js" file
-
+// チャットを一番下にスクロールする
 function scrollChat() {
 	if ($("#chat-18").hasClass('activated')) return
 	else {
@@ -6958,7 +6962,7 @@ $("#getplaylist").unbind()
 
 
 // Keyboard shortcuts - LeftAlt + key
-
+// キーボードショートカット メモ: あとでマリwikiにでもまとめたい
 $(document).on('keydown', function (e) {
 	if (e.altKey && !e.ctrlKey) {
 		if (String.fromCharCode(e.which) === "1") {
