@@ -3074,7 +3074,7 @@ $("footer .credit").html($("footer .credit").html() + html);
 /* ---------- [SECTION 4] USER INTERFACE EVENTS ---------- */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+// キリがないので一旦飛ばします
 
 // Not closing selected dropdown menus ('noclose' class) after clicking an option
 
@@ -3359,7 +3359,7 @@ $navbarUnpin.on("click", function () {
 
 
 // Layout dropdown menu events
-
+// プレミアム設定
 $("#layout-1").on("click", function () {
 	$layoutMenu.removeClass('open');
 	createModal('Premium Settings');
@@ -3887,7 +3887,7 @@ $("#layout-1").on("click", function () {
 
 	$('<div class="text-info pull-left">Changes are applied automatically.</div>').appendTo(footer);
 });
-
+// テーマ&ユーザCSS
 $("#layout-2").on("click", function () {
 	$layoutMenu.removeClass('open');
 	createModal('Theme & User CSS');
@@ -4058,6 +4058,7 @@ $("#layout-2").on("click", function () {
 	$('<div class="text-info pull-left">Changes are applied automatically.</div>').appendTo(footer);
 });
 
+//「レイアウト」から表示できるその他のボタン
 $("#layout-3").on("click", function () {
 	COMPACT ? fluidLayout() : compactLayout();
 	setOpt('SP_compact', COMPACT = !COMPACT);
@@ -4142,7 +4143,7 @@ $("#scroll-top, #scroll-to-chat").on("click", function () {
 
 
 // Playlist options dropdown menu events
-
+// プレイリストの表示関連の設定(左の歯車)　#pls-〇〇は全部そう
 $("#pls-1").on("click", function () {
 	createModal('Last Media');
 	createModalTabs(['Current Media', 'Media History', 'My Added Media'], "lastmedia");
@@ -4440,7 +4441,7 @@ $("#pls-11").on("click", function () {
 
 
 // Player options dropdown menu events
-
+// プレイヤーの表示関連の設定(右の歯車)　plr-〇〇のやつは全部そう
 $("#plr-1").on("click", function () {
 	if (HIDDENPLR) $("#hidden-plr").remove()
 	else {
@@ -4648,7 +4649,7 @@ $("#plr-17").on("click", function () {
 
 
 // Favourites button events
-
+// お気に入り動画の登録のボタン
 $("#favs-btn").on("click", function () {
 	toggleElement($favscontrol);
 	$(this).toggleClass('active');
@@ -4657,7 +4658,7 @@ $("#favs-btn").on("click", function () {
 
 
 // Notepad button events
-
+// メモ帳
 $("#notepad-btn").on("click", function () {
 	toggleElement($notepadwrap);
 	$(this).toggleClass('btn-success');
@@ -4665,7 +4666,7 @@ $("#notepad-btn").on("click", function () {
 
 
 // Chat sounds control button events
-
+// 音声関連の設定ウィンドウ(チャット欄下のスピーカーボタン)
 $("#sounds-btn").on("click", function () {
 	createModal('Chat Sounds Control');
 
@@ -4799,7 +4800,9 @@ $("#sounds-btn").on("click", function () {
 
 
 // Chat functions dropdown menu events
+// チャット欄下のスパナのメニュー
 
+// プレミアムコマンドヘルプ
 $("#chat-f1").on("click", function () {
 	createModal('Premium Commands Help');
 	createModalTabs(['Functions', 'Text effects', 'Layout', 'Shorthands', 'Keyboard'], "commands");
@@ -4810,6 +4813,8 @@ $("#chat-f1").on("click", function () {
 			'chat antiflood is enabled. "# of messages allowed before throttling" option in ' +
 			'Chat Settings must be above 1 to run those commands. Ask channel administrator.</p><br />';
 	}
+	
+	// !をつけて実行できるコマンド一覧
 	html += '<div class="panel panel-primary"><div class="panel-heading">Random-type commands</div>' +
 		'<div class="panel-body"><table class="commands-tbl">' +
 		'<tr onclick="insertbeforeText(\'' + "!gif " + '\')"><td><code>!gif</code></td><td>get random gif from giphy.com, using selected phrase<br />' +
@@ -4845,6 +4850,7 @@ $("#chat-f1").on("click", function () {
 		'</table></div></div>';
 	$("#_c1").html(html);
 
+	// 文字効果
 	var ns = '<i>(some browsers may not support this effect)</i>';
 	var html = 'Type and send to chat text between codes given below, to apply selected effects.<br /><br />' +
 		'<div class="panel panel-primary"><div class="panel-heading">Genuine codes</div>' +
@@ -4904,7 +4910,8 @@ $("#chat-f1").on("click", function () {
 		+
 		'</table></div></div>';
 	$("#_c2").html(html);
-
+	
+	// /をつけて実行するコマンド
 	var html = '<div class="panel panel-primary">' +
 		'<div class="panel-heading">Settings commands</div>' +
 		'<div class="panel-body"><table class="commands-tbl">' +
@@ -4948,7 +4955,8 @@ $("#chat-f1").on("click", function () {
 		'<tr onclick="insertbeforeText(\'' + "/mentions" + '\')"><td><code>/mentions</code></td><td>open "My Mentions" modal window</td></tr>' +
 		'</table></div></div>';
 	$("#_c3").html(html);
-
+	
+	// //0とかで、前もって登録したものを投下できるようにするやつ
 	var html = 'Use chatline shortcuts instead of defined long texts or code sequences.<br /><br />' +
 		'<table id="sctbl" class="commands-tbl maxwidth"></table><br /><div class="centered">' +
 		'<button id="saveshortcuts-btn" class="btn btn-primary">Save Changes</button><br /><br /></div>';
@@ -4973,7 +4981,8 @@ $("#chat-f1").on("click", function () {
 			$("#saveshortcuts-btn").removeClass('btn-success')
 		}, 500);
 	});
-
+	
+	//左Altを使って呼び出せるキーボードショートカット一覧
 	var html = '<div class="panel panel-primary"><div class="panel-heading">Keyboard shortcuts</div>' +
 		'<div class="panel-body"><table class="commands-tbl">';
 	var rows = [
@@ -5002,6 +5011,7 @@ $("#chat-f1").on("click", function () {
 	$("#_c5").html(html);
 });
 
+// 簡易エモートリスト
 $("#chat-f2").on("click", function () {
 	$("#chatpanel").remove();
 	if (!$(this).hasClass('activated')) {
@@ -5086,6 +5096,8 @@ $("#chat-f2").on("click", function () {
 	$(this).toggleClass('activated');
 });
 
+// 記号・特殊文字パネル
+// :@@:などのチャット効果も挿入できる
 $("#chat-f3").on("click", function () {
 	$("#chatpanel").remove();
 	if (!$(this).hasClass('activated')) {
@@ -5231,7 +5243,7 @@ $("#chat-f3").on("click", function () {
 			}
 		]
 		var len = tbl.length;
-		for (var i = 0; i < len; i++) {
+		for (var i = 0; i < len; i++) {// チャットに挿入する関数はここに書いてある
 			html += '<button class="btn btn-sm btn-default" ' +
 				'onclick="insertChatCode(\'' + tbl[i]["t1"] + '\', \'' + tbl[i]["t2"] + '\')">' +
 				'<span style="' + tbl[i]["s"] + '">' + tbl[i]["c"] + '</span></button>';
@@ -5247,18 +5259,18 @@ $("#chat-f3").on("click", function () {
 	} else $("#chatheader, #messagebuffer, #userlist").removeClass('darkened');
 	$(this).toggleClass('activated');
 });
-
+// ユーザーリストを右側に表示
 $("#chat-f4").on("click", function () {
 	ULISTRIGHT ? userlistSide("left") : userlistSide("right");
 	setOpt('SP_ulistright', ULISTRIGHT = !ULISTRIGHT);
 });
-
+// ユーザープロフィールの拡大表示
 $("#chat-f5").on("click", function () {
 	$userlist.toggleClass('bigp');
 	$(this).toggleClass('activated');
 	setOpt('SP_bigprofiles', BIGPROFILES = !BIGPROFILES);
 });
-
+// カスタム通知音
 $("#chat-f6").on("click", function () {
 	createModal('Custom Ping Sound');
 
@@ -5358,7 +5370,7 @@ $("#chat-f6").on("click", function () {
 
 	$('<div class="text-info pull-left">Changes are applied automatically.</div>').appendTo(footer);
 });
-
+// チャット欄のクリア
 $("#chat-f7").on("click", function () {
 	if (confirm('Do you really want to clear current content of your chat window?')) {
 		$messagebuffer.html('');
@@ -5368,7 +5380,9 @@ $("#chat-f7").on("click", function () {
 
 
 // Chat options dropdown menu events
+// チャット欄の下の歯車　#chat-〇〇のやつは全部そう
 
+// 画像リンクを埋め込み表示
 $("#chat-1").on("click", function () {
 	if (SHOWIMAGES) {
 		$messagebuffer.find(ImageExtensions).each(function () {
@@ -5384,7 +5398,7 @@ $("#chat-1").on("click", function () {
 	setOpt('SP_showimages', SHOWIMAGES = !SHOWIMAGES);
 	if (SCROLLCHAT) scrollChat();
 });
-
+// 動画リンクを埋め込み表示
 $("#chat-2").on("click", function () {
 	if (SHOWVIDEOS) {
 		$messagebuffer.find(MediaExtensions).each(function () {
@@ -5395,7 +5409,7 @@ $("#chat-2").on("click", function () {
 	setOpt('SP_showvideos', SHOWVIDEOS = !SHOWVIDEOS);
 	if (SCROLLCHAT) scrollChat();
 });
-
+// ニコニコモード
 $("#chat-3").on("click", function () {
 	if (!PLAYERTEXT) {
 		$videowrap.find(".embed-responsive-16by9").prepend('<div id="player-chat-wrap" />');
@@ -5407,7 +5421,7 @@ $("#chat-3").on("click", function () {
 	$(this).toggleClass('activated');
 	setOpt('SP_playertext', PLAYERTEXT = !PLAYERTEXT);
 });
-
+// メモ: 要素が存在しない　謎
 $("#chat-4").on("click", function () {
 	if ($(this).hasClass('activated')) {
 		if (typeof BLINKBTN !== "undefined") {
@@ -5626,7 +5640,7 @@ $("#chat-22").on("click", function () {
 
 
 // Filter playlist input and buttons events
-
+// プレイリストのユーザー名検索
 $("#plfilter").on("keydown", function (ev) {
 	if (ev.keyCode == 13) {
 		if ($(this).val() == "") document.getElementById("whole_playlist").click()
@@ -5655,7 +5669,7 @@ $("#close_plfilter").on("click", function () {
 
 
 // Add to favourites button events
-
+// お気に入り動画の登録ボタン
 $("#addtofav-btn").on("click", function () {
 	if ($queue.find(".queue_entry").length < 1) return;
 	var uid = $(".queue_active").data("media");
@@ -5687,7 +5701,7 @@ $("#addtofav-btn").on("click", function () {
 
 
 // Additional options buttons events
-
+// チャット欄の下の稲妻
 $("#addopts-btn").on("click", function () {
 	toggleElement($addoptswrap);
 	if ($(this).hasClass('active')) clearInterval(UTCCLOCK)
@@ -5699,7 +5713,7 @@ $("#addopts-btn").on("click", function () {
 	}
 	$(this).toggleClass('active');
 });
-
+// 稲妻を押すと出てくる「チャット」ボタン
 $("#tools-btn").on("click", function () {
 	if (!TOOLSENABLED) setOpt('SP_toolsenabled', TOOLSENABLED = true);
 	createModal('Premium Admin Tools');
@@ -6009,13 +6023,13 @@ $("#tools-btn").on("click", function () {
 		'4. Paste direct link to your own file into External Javascript channel option.</div></div>';
 	$("#_c6").html(html);
 });
-
+// /clearボタン
 $("#clear-btn").on("click", function () {
 	if (confirm('Are you sure to clear the chat window for all users?')) socket.emit("chatMsg", {
 		msg: '/clear'
 	});
 });
-
+// Autoclearボタン
 $("#autoclear-btn").on("click", function () {
 	if ($(this).hasClass('btn-danger')) {
 		$(this).html('Autoclear');
@@ -6030,7 +6044,7 @@ $("#autoclear-btn").on("click", function () {
 	}
 	$(this).toggleClass('btn-danger');
 });
-
+// アンチAFKボタン
 $("#antiafk-btn").on("click", function () {
 	if ($(this).hasClass('btn-warning')) clearInterval(ANTIAFK)
 	else {
@@ -6042,13 +6056,13 @@ $("#antiafk-btn").on("click", function () {
 	}
 	$(this).toggleClass('btn-warning');
 });
-
+// afkボタン
 $("#afk-btn").on("click", function () {
 	socket.emit("chatMsg", {
 		msg: '/afk'
 	});
 });
-
+// jukeboxボタン　レイアウトがかなり変わる
 $("#jukebox-btn").on("click", function () {
 	$body.toggleClass('jukebox-mode');
 	var queuewrap = $queue.parent();
@@ -6091,7 +6105,8 @@ $("#jukebox-btn").on("click", function () {
 	if (SCROLLCHAT) scrollChat();
 	scrollQueue();
 });
-
+// Cytubeの公開チャンネル一覧
+// トップページのHTMLを$.getで取得したのち、table部分を取り出して表示している
 $("#public-btn").on("click", function () {
 	$("#channel-list").remove();
 	if ($(this).hasClass('btn-warning')) $(this).removeClass('btn-warning')
@@ -6109,7 +6124,7 @@ $("#public-btn").on("click", function () {
 
 
 // Playlist labels events
-
+// プレイリスト上部にある小さいボタンたち
 $scrollToCurrent.on("click", function () {
 	if (EXPANDPL) {
 		var pos = $(".queue_active").offset().top;
@@ -6140,7 +6155,7 @@ $hidePlaylist.on("click", function () {
 
 
 // Save notes button events
-
+// メモの保存　ユーザー名によって使うクッキー☆の名前が分けられている
 $("#notesave-btn").on("click", function () {
 	var val = $("#note-area").val();
 	var len = val.length;
@@ -6999,7 +7014,7 @@ $("#getplaylist").unbind()
 
 
 // Keyboard shortcuts - LeftAlt + key
-// キーボードショートカット メモ: あとでマリwikiにでもまとめたい
+// キーボードショートカット メモ: あとでマリwikiにでもまとめたい→プレミアムコマンドヘルプに全部書いてあったわ
 $(document).on('keydown', function (e) {
 	if (e.altKey && !e.ctrlKey) {
 		if (String.fromCharCode(e.which) === "1") {
