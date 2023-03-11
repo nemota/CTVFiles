@@ -229,7 +229,7 @@ _SINGLECOLUMN = USEROPTS.layout == "hd" ? true : false;
 _SYNCH = USEROPTS.layout.indexOf("synchtube") > -1 ? true : false;
 _SHOWELEMENTS = '{"header":1,"logo":1,"motd":1,"announcements":1,"mainheader":1,"playerlabels":1,"chatlabels":1,' +
 	'"playercontrols":1,"playlistbtns":1,"playlistmenu":1,"playermenu":1,"playerbtns":1,' +
-	'"mediadbbtns":1,"chatcontrols":1,"pollemotebtns":1,"colorsbtn":1,"commondsbtn":1,"comandosbtn":1,"chatbtns":1,' +
+	'"mediadbbtns":1,"chatcontrols":1,"pollemotebtns":1,"colorsbtn":1,"commands1btn":1,"commands2btn":1,"chatbtns":1,' +
 	'"chatmenus":1,"plmeta":1,"playlistlabels":1,"footer":1}';
 
 // Get and set global variables stored in localStorage/cookies, or set default values
@@ -2775,7 +2775,6 @@ else if (Commands2Array.length > 50) $commands2Menu.addClass('widecm');
 var commands2_arr = Object.keys(Commands2Array);
 
 for (i in commands2_arr) {
-	console.log(i);
 	var c = commands2_arr[i];
 	var j = commands2_arr.length > 50 ? 8 : 1;
 	if (i % j == 0) var commands2group = $('<li class="btn-group btn-commands2" />').appendTo("#commands2-wrap");
@@ -3616,8 +3615,8 @@ $("#layout-1").on("click", function () {
 		['Chat controls', 'chatcontrols', 1],
 		['New poll and emote list buttons', 'pollemotebtns', -1],
 		['Colors button', 'colorsbtn', -1],
-		['コマンドボタン', 'commondsbtn', -1],
-		['comando button', 'comandobtn', -1],
+		['チャットコマンド1ボタン', 'commands1btn', -1],
+		['チャットコマンド2ボタン', 'commands2btn', -1],
 		['Oekaki, notepad, and chat sounds buttons', 'chatbtns', -1],
 		['Chat control menus', 'chatmenus', -1],
 		['Playlist footer', 'plmeta', 1],
