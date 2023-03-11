@@ -403,9 +403,9 @@ ColorsArray = [
 	'turquoise', 'palegreen', 'khaki', 'salmon', 'mediumpurple',
 ];
 
-//CTV独自拡張含む　チャットに使えるコマンドの例示のHTML　メモ:変数名変更: CommondsArray→CommandsArray
+//CTV独自拡張含む　チャットに使えるコマンドの例示のHTML　メモ:変数名変更: CommondsArray→Commands1Array
 //ここに書かれているコマンドはチャットフィルタから使うことができる(ことになっていそう)
-CommandsArray = {
+Commands1Array = {
 	'yu': '<span style="font-size:10px;color:#FFFFFF; font-family:HG創英角ﾎﾟｯﾌﾟ体,sans-serif;text-shadow:0px 0px 4px #000000,0px 0px 4px #000000,0px 0px 4px #000000">じゃあな！</span>',
 	'an': '<span style="font-size:10px;color:#18E0FF; font-family:Fuwafude,sans-serif;text-shadow:3px 3px 1px #000000,-3px 3px 1px #000000,3px -3px 1px #000000,-3px -3px 1px #000000,3px 0px 1px #000000,0px 3px 1px #000000,-3px 0px 1px #000000,0px -3px 1px #000000">おはさく</span>',
 	'd': '<span class="dist">目立</span>',
@@ -436,10 +436,10 @@ CommandsArray = {
 	'bw': '<span style="color:white; background-color:black">白黒</span>',
 };
 
-//CTV独自拡張含む　コマンドたち　変数名変更予定
+//CTV独自拡張含む　コマンドたち　変数名変更: ComandoArray→Commands2Array
 //ここに書かれているコマンドはチャットフィルタから使うことができる(ことになっていそう)
 //メモ:一部動作しない
-ComandoArray = {
+Commands2Array = {
 
 	'@': '<span style="display:inline-block;transform:rotateY(180deg)">R</span>',
 	'z!': '<span class="rotz">回</span>',
@@ -1532,7 +1532,7 @@ function sortFavs(mode) {
 }
 
 // Media time left on the title bar
-// 再生画面上に書かれる残り時間(歯車→残り時間の表示)
+// 再生画面上に書かれる残り時間(歯車→残り時間の表示)の毎秒更新の中身
 function timeLeftClock() {
 	var left;
 	var time = (!PLAYER || PLAYER.mediaType === undefined) ? -1 : getTimePos();
@@ -1608,7 +1608,9 @@ function volumeLvl() {
 
 
 // ***** Functions from "Layout" menu (in order of appearance) ***** //
+// 「レイアウト」メニューから選べるレイアウトを適用するための関数
 
+// コンパクト(横幅削減)
 function compactLayout() {
 	$body.addClass('fluid');
 	$(".container-fluid").removeClass('container-fluid').addClass('container');
@@ -1617,6 +1619,7 @@ function compactLayout() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// メモ: 今度調査
 function fluidLayout() {
 	$body.removeClass('fluid');
 	$(".container").removeClass('container').addClass('container-fluid');
@@ -1626,6 +1629,7 @@ function fluidLayout() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// 一列のレイアウト
 function singleColumn() {
 	if (LARGECHAT) document.getElementById("layout-7").click();
 	if (LARGEPLAYER) document.getElementById("layout-8").click();
@@ -1658,6 +1662,7 @@ function singleColumn() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// 2列レイアウト(平常状態)に戻す
 function twoColumns() {
 	$("#layout-7, #layout-8, #resize-video-smaller, #resize-video-larger").show();
 	$("#controlsrow, #playlistrow, #plr-13, #jukebox-btn").show();
@@ -1685,6 +1690,7 @@ function twoColumns() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// 古いSynchtubeのレイアウトにする
 function synchLayout() {
 	$videowrap.after($chatwrap.detach());
 	$leftcontrols.before($rightcontrols.detach());
@@ -1699,6 +1705,7 @@ function synchLayout() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// 古いSynchtubeから元に戻す
 function nonSynchLayout() {
 	$videowrap.before($chatwrap.detach());
 	$leftcontrols.after($rightcontrols.detach());
@@ -1716,6 +1723,7 @@ function nonSynchLayout() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// MOTDをページ下部へ
 function bottomMOTD() {
 	$("#resizewrap").before($("#motdrow").detach()).before($("#announcements").detach());
 	$("#playlistrow").addClass('margin-bottom-10');
@@ -1723,6 +1731,7 @@ function bottomMOTD() {
 	$("#layout-6").addClass('activated');
 }
 
+// MOTDをページ上部へ
 function topMOTD() {
 	$("#drinkbarwrap").before($("#motdrow").detach()).before($("#announcements").detach());
 	$("#playlistrow").removeClass('margin-bottom-10');
@@ -1730,6 +1739,7 @@ function topMOTD() {
 	$("#layout-6").removeClass('activated');
 }
 
+// プレイヤーを消してチャットを大きく表示
 function largeChat() {
 	HIDDENVWRAP = true;
 	if (LARGEPLAYER) document.getElementById("layout-8").click();
@@ -1748,6 +1758,7 @@ function largeChat() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// チャットの表示を大から元に戻す
 function normalChat() {
 	HIDDENVWRAP = false;
 	$("#rightcontrols, #resize-video-smaller, #resize-video-larger, #plr-13, #jukebox-btn").show();
@@ -1763,6 +1774,7 @@ function normalChat() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// チャットを消して動画プレイヤーを大きく表示
 function largePlayer() {
 	if (LARGECHAT) document.getElementById("layout-7").click();
 	$("#chatwrap, #resize-video-smaller, #resize-video-larger, #leftcontrols").hide();
@@ -1778,6 +1790,7 @@ function largePlayer() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// 動画プレイヤーを大から元に戻す
 function normalPlayer() {
 	$("#chatwrap, #resize-video-smaller, #resize-video-larger, #leftcontrols").show();
 	$("#plr-13, #plr-14, #jukebox-btn").show();
@@ -1794,6 +1807,7 @@ function normalPlayer() {
 	if (SCROLLCHAT) scrollChat();
 }
 
+// シアターモード(動画の表示がクソでかい)
 function theatreMode() {
 	if (LARGECHAT) normalChat();
 	if (LARGEPLAYER) normalPlayer();
@@ -1865,6 +1879,7 @@ function theatreMode() {
 	$chatline.focus();
 }
 
+// シアターモードをやめる
 function closeTheatreMode() {
 	$("#close-btn, #switch-btn").remove();
 	if ($queue.hasClass('theatre-mode')) {
@@ -1907,6 +1922,7 @@ function closeTheatreMode() {
 	$chatline.focus();
 }
 
+// ラジオモード
 function radioMode() {
 	HIDDENVWRAP = true;
 	$("#player-chat-wrap").find(".marq, .marq2").remove();
@@ -2005,6 +2021,7 @@ function radioMode() {
 	updateQueueInfo();
 }
 
+// ラジオモードをやめる
 function closeRadioMode() {
 	HIDDENVWRAP = false;
 	$("#radioheaderwrap, #mediastats, #newplaylistwrap, #togglevid-btn").remove();
@@ -2045,8 +2062,9 @@ function closeRadioMode() {
 }
 
 
-// ***** Other layout functions (in alphabetical order) ***** //
+// ***** Other layout functions (in alphabetical order) ***** //レイアウトに使うその他の関数
 
+// チャット欄の高さを変える
 function chatHeight(mode) {
 	if (mode == "compact") {
 		$expandChat.removeClass('label-success');
@@ -2072,6 +2090,7 @@ function chatHeight(mode) {
 	$chatline.focus();
 }
 
+// 動画を追加した人の名前の表示と非表示
 function contributorsNames(mode) {
 	if (mode == "hide") {
 		$queue.find("li .contrib").each(function () {
@@ -2087,6 +2106,7 @@ function contributorsNames(mode) {
 	}
 }
 
+// タイトルバーへの残り時間の表示非表示切り替え、更新のintervalの設定
 function mediaTimeLeft(mode) {
 	if (mode == "hide") {
 		clearInterval(TIMELEFTCLOCK);
@@ -2100,6 +2120,8 @@ function mediaTimeLeft(mode) {
 	}
 }
 
+// ページの一番上にあるナビゲーションバーを、画面上部に追従するかページ上部に置いておくかを切り替える
+// ようこそ、○○さん　の左にあるボタンから操作できるやつ
 function navbarMode(mode) {
 	if (mode == "static") {
 		var html = '<span class="glyphicon glyphicon-open" title="Make navigation bar scrollable"></span>';
@@ -2116,11 +2138,12 @@ function navbarMode(mode) {
 	document.getElementById("navbar-unpin").innerHTML = html;
 }
 
+// マスコット(horahora514など)
 function playerMascot(mode) {
 	if (mode == "hide") {
 		$("#mascot").remove();
 	} else if (mode == "show") {
-		var arr = [
+		var arr = [// メモ: マスコットに使う画像の設定
 			['horahora514', CYTUBE + 'up10777.gif'],
 			['Rolling HSI', CYTUBE + 'up11409.gif'],
 			['Rolling PSR', CYTUBE + 'up12274.gif'],
@@ -2201,6 +2224,7 @@ function playerMascot(mode) {
 	}
 }
 
+// 動画の進行割合を表す背景の表示非表示(動画下の歯車→プログレスバーの非表示　から切り替えられるやつ)
 function progressBarMode(mode) {
 	if (mode == "show") {
 		$videowrapHeader.addClass('pbar');
@@ -2213,7 +2237,8 @@ function progressBarMode(mode) {
 		$videowrapHeader.removeClass('pbar').css('background-size', '0% 100%');
 	}
 }
-
+//ここからしばらくプレイリストの見た目関連
+//プレイリストの、動画を削除するなどのボタンの表示非表示(左の歯車→ボタンを非表示)
 function queueButtons(mode) {
 	if (mode == "show") {
 		if (HIDEPLSBTNS) {
@@ -2254,16 +2279,18 @@ function queueMiniatures(mode) {
 	}
 }
 
+// 左の歯車→プレイリスト番号を表示　のやつ
 function queueMode(mode) {
 	if (mode == "default") $queue.removeClass('numbered')
 	else if (mode == "numbered") $queue.addClass('numbered');
 }
-
+// 左の歯車→スクロールバーを非表示　のやつ
 function queueScrollbar(mode) {
 	if (mode == "hide") $queue.addClass('noscroll')
 	else if (mode == "show") $queue.removeClass('noscroll');
 }
-
+// 動画タイトルの表示の大きさ切り替え
+// 右の歯車→タイトルバーの拡大
 function titlebarMode(mode) {
 	if (mode == "full") {
 		$titlerow = $('<div id="titlerow" class="row" />').insertBefore("#main");
@@ -2289,7 +2316,7 @@ function titlebarMode(mode) {
 		clearInterval(MEDIACLOCK);
 	}
 }
-
+// ユーザーリストをチャット欄の右に表示　チャット欄下のスパナ→ユーザーリストを右側に表示　のやつ
 function userlistSide(mode) {
 	if (mode == "left") {
 		$("#chat-f4").removeClass('activated');
@@ -2308,10 +2335,11 @@ function userlistSide(mode) {
 /* ---------- [SECTION 3] USER INTERFACE ---------- */
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+// ここから見た目の整備とボタンへの機能付与など
+// 他の所でも使う関数というよりは、始めの一回だけやる処理が多い
 
 // Add temporary videowrap for "Remove the video player" or "Remove Video" mode
-
+// メモ: よくわからん　プレイヤー非表示時とかに関わるっぽい？
 if (!$("#videowrap")[0]) {
 	NOPLAYER = true;
 	$("#chatwrap, #chatline").removeClass('col-lg-12 col-md-12').addClass('col-lg-5 col-md-5');
@@ -2351,6 +2379,7 @@ if (!$("#videowrap")[0]) {
 		});
 }
 
+// 設定の適用
 
 // Undo HD layout if single column enabled
 
@@ -2365,12 +2394,12 @@ if (GLUELAYOUT) $body.addClass('glued');
 if (TRANSPARENTNAV) $nav.addClass('transparent');
 
 // Alter brand link to channel URL, instead of homepage
-
+// 左上のボタンのリンクを変える
 $("nav .navbar-brand").attr('href', document.URL);
 
 
 // Profile image and additional options in "Account" menu
-
+// ページ上部のバーにある「アカウント」メニューに、アバター画像と、チャット履歴に飛べるボタンなどを付与
 var ul = $('#nav-collapsible a:contains("Account")').parent().find("ul");
 if (CLIENT.rank > 0) {
 	var li = $('<li class="centered" />').prependTo(ul);
@@ -2389,7 +2418,7 @@ $('<li id="my-mentions"></li>').appendTo(ul).html(html);
 
 
 // Navigation bar extended "Layout" menu
-
+// 「レイアウト」ボタン
 var html = '<li><a id="layout-1">Premium Settings</a></li>' +
 	'<li><a id="layout-2" class="opt"><span class="glyphicon glyphicon-ok"></span>Theme & User CSS</a></li>' +
 	'<li class="divider"></li>' +
@@ -2407,9 +2436,12 @@ var html = '<li><a id="layout-1">Premium Settings</a></li>' +
 $layoutMenu = $('#nav-collapsible a[onclick*="chatOnly"]').parent().parent().addClass('noclose').html(html)
 	.parent().find("> a").prepend('<span class="glyphicon glyphicon-cog nav-cog layout-cog" />')
 	.parent().addClass('layout-menu');
+	
+//なぜかレイアウトメニューが出てこないことがあるので表示(CTV独自修正)
+$layoutMenu.css("display","inline")
 
 // Mentions indicator
-
+// 言及されたときに上部バーに出る赤い手紙マーク
 NOTIFNUM = 0;
 var html = '<span class="glyphicon glyphicon-envelope nav-cog text-danger"></span>' +
 	'<strong>0</strong>';
@@ -2423,12 +2455,13 @@ $notifier = $('<li id="notifier" title="Unchecked mentions" />').appendTo(ul).hi
 
 
 // Navigation bar icons
-
+// 上部バーの右にある、バーを固定したり折りたたんだりするためのやつ
 $navbarUp = $('<div id="navbar-up" class="pull-right pointer navbar-text" />').appendTo("#nav-collapsible")
 	.html('<span class="glyphicon glyphicon-chevron-up" title="Collapse navigation bar"></span>');
 $navbarUnpin = $('<div id="navbar-unpin" class="pull-right pointer navbar-text" />').appendTo("#nav-collapsible")
 	.html('<span class="glyphicon glyphicon-open" title="Make navigation bar scrollable"></span>');
 
+// 設定の適用
 
 // Optional custom navigation bar welcome text
 
@@ -2454,7 +2487,7 @@ if (HIDEINDICATOR) $chatwrap.addClass('noindicator');
 
 
 // Chat header labels
-
+// チャット欄の左上についてる細かいボタン
 $("#modflair").detach().prependTo($chatheader);
 $scrollTop = $('<span id="scroll-top" class="label label-default pull-right pointer scroll-label" />')
 	.insertBefore($userlisttoggle).attr('title', 'Scroll chat panel to top').html('Top ▴');
@@ -2464,6 +2497,7 @@ $expandChat = $('<span id="expand-chat" class="label label-default pull-right po
 	.insertBefore($userlisttoggle).attr('title', 'Toggle chat expanding')
 	.html('<span class="glyphicon glyphicon-resize-vertical"></span>');
 
+// こまごまとしたこと
 
 // Autohide chat and userlist scrolls (if enabled)
 
@@ -2487,7 +2521,7 @@ if (hasPermission("settemp")) $(".add-temp").prop('checked', false);
 
 
 // Optional Media Database button and panel
-
+// メモ: MediaDatabase
 if (typeof MediaDatabase !== "undefined" || getURLVar("db") != "" || (EXECDB && CUSTOMDBURL != "")) {
 	dbgroup = $('<div id="db-group" class="btn-group pull-right" />').appendTo("#addfromurl .checkbox");
 	$dbBtn = $('<button id="db-btn" class="btn btn-sm btn-default" title="Toggle Media Database" />')
@@ -2537,7 +2571,7 @@ if (typeof MediaDatabase !== "undefined" || getURLVar("db") != "" || (EXECDB && 
 
 
 // Playlist options dropdown menu
-
+// プレイリスト関連のメニュー(再生画面下の左の歯車)
 var html = '<button id="pls-btn" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" ' +
 	'title="Playlist controls"><span class="glyphicon glyphicon-cog"></span> ▾</button>' +
 	'<ul id="pls-menu" class="dropdown-menu noclose">' +
@@ -2564,7 +2598,7 @@ var html = '<button id="pls-btn" class="btn btn-sm btn-default dropdown-toggle" 
 	'<li group="2"><a id="pls-11" class="opt"><span class="glyphicon glyphicon-ok"></span>' +
 	'Hide Buttons</a></li></ul>';
 $plsbtnouter = $('<div id="plsbtn-outer" class="btn-group" />').appendTo("#plcontrol").html(html);
-
+//プレイリスト関連の表示設定を適用
 if (PLSNUMBERS) {
 	$("#pls-4").addClass('activated');
 	queueMode("numbered");
@@ -2599,7 +2633,7 @@ if (!hasPermission("seeplaylist")) $plsbtnouter.hide();
 
 
 // Player options dropup menu
-
+// 動画プレイヤーに関するメニュー
 var html = '<button id="plr-btn" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" ' +
 	'title="Player controls"><span class="glyphicon glyphicon-cog"></span> ▴</button>' +
 	'<ul id="plr-menu" class="dropdown-menu dropdown-menu-right noclose">' +
@@ -2648,7 +2682,7 @@ var html = '<button id="plr-btn" class="btn btn-sm btn-default dropdown-toggle" 
 	'Show Player Mascot</a></li>' +
 	'</ul>';
 $plrbtnouter = $('<div id="plrbtn-outer" class="btn-group dropup" />').prependTo("#videocontrols").html(html);
-
+// 設定の適用
 if (!USEROPTS.wmode_transparent) {
 	$plrbtnouter.removeClass('dropup');
 	document.getElementById("plr-btn").innerHTML = '<span class="glyphicon glyphicon-cog"></span> ▾';
@@ -2667,13 +2701,13 @@ $("#plr-menu").find("li[group=2]").hide();
 
 
 // Additional options button
-
+// 稲妻型のボタン
 $addoptsBtn = $('<button id="addopts-btn" class="btn btn-sm btn-default" title="Additional options" />')
 	.html('<span class="glyphicon glyphicon-flash"></span> ▾').insertBefore("#mediarefresh");
 
 
 // Favourite media links button
-
+// お気に入り動画関連メニューのボタン
 $favsBtn = $('<button id="favs-btn" class="btn btn-sm btn-default" title="Add and manage Premium favourites" />')
 	.html('<span class="glyphicon glyphicon-thumbs-up"></span>').insertBefore("#mediarefresh");
 
@@ -2681,7 +2715,7 @@ if (!hasPermission("seeplaylist")) $favsBtn.attr('disabled', 'disabled');
 
 
 // Poll controls wrap
-
+// 「投票アイテムの追加」などがあるところ
 $pollcontrols = $('<div id="pollcontrols" class="btn-group" />').prependTo($leftcontrols)
 	.append($("#newpollbtn").detach()).append($("#emotelistbtn").detach());
 
@@ -2689,7 +2723,7 @@ $("#newpollbtn, #emotelistbtn").addClass('btn-chatctrl');
 
 
 // Chat colors button and menu
-
+// チャット欄の、色を選べるやつ
 var html = '<button id="colors-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
 	'data-toggle="dropdown" aria-expanded="false">Colors ▴</button>' +
 	'<ul id="colors-wrap" class="dropdown-menu centered"></ul>';
@@ -2697,7 +2731,7 @@ $colorsMenu = $('<div id="colors-menu" class="dropup btn-group" />').appendTo($p
 
 if (ColorsArray.length < 1) $colorsMenu.hide()
 else if (ColorsArray.length > 50) $colorsMenu.addClass('widecm');
-
+// 色メニューの構築
 for (i in ColorsArray) {
 	var j = ColorsArray.length > 50 ? 8 : 5;
 	if (i % j == 0) var colgroup = $('<li class="btn-group btn-colors" />').appendTo("#colors-wrap");
@@ -2705,46 +2739,48 @@ for (i in ColorsArray) {
 		.css('background-color', ColorsArray[i]).html('■').appendTo(colgroup);
 }
 
-// Chat commonds button and menu
-
-var html = '<button id="commonds-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
+// Chat commands button and menu(1)
+// チャットで使えるコマンド(ひとカタマリ目)のメニューを構築
+// メモ: commond→commands1 と改名した
+var html = '<button id="commands1-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
 	'data-toggle="dropdown" aria-expanded="false" title="コマンド1"><span class="glyphicon glyphicon-tasks"></span> ▴</button>' +
-	'<ul id="commonds-wrap" class="dropdown-menu centered"></ul>';
-$commondsMenu = $('<div id="commonds-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
+	'<ul id="commands1-wrap" class="dropdown-menu centered"></ul>';
+$commands1Menu = $('<div id="commands1-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
 
-if (CommandsArray.length < 1) $commondsMenu.hide()
-else if (CommandsArray.length > 50) $commondsMenu.addClass('widecm');
+if (Commands1Array.length < 1) $commands1Menu.hide()
+else if (Commands1Array.length > 50) $commands1Menu.addClass('widecm');
 
-var commonds_arr = Object.keys(CommandsArray);
+var commands1_arr = Object.keys(Commands1Array);
 
-for (i in commonds_arr) {
-	var c = commonds_arr[i];
-	var j = commonds_arr.length > 50 ? 8 : 1;
-	if (i % j == 0) var commondgroup = $('<li class="btn-group btn-commonds" />').appendTo("#commonds-wrap");
-	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'[' + commonds_arr[i] + ']\')" />').appendTo(commondgroup).html(CommandsArray[c]);
+for (i in commands1_arr) {
+	var c = commands1_arr[i];
+	var j = commands1_arr.length > 50 ? 8 : 1;
+	if (i % j == 0) var commands1group = $('<li class="btn-group btn-commonds" />').appendTo("#commands1-wrap");//メモ: このifの必要性は何なのだろう
+	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'[' + commands1_arr[i] + ']\')" />').appendTo(commands1group).html(Commands1Array[c]);
 }
 
-// Chat comando button and menu
-
-var html = '<button id="comando-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
+// Chat commands button and menu(2)
+// チャットで使えるコマンド(ふたカタマリ目)のメニューを構築
+// メモ: comando→commands2 と改名した
+var html = '<button id="commands2-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
 	'data-toggle="dropdown" aria-expanded="false" title="コマンド2"><span class="glyphicon glyphicon-credit-card"></span> ▴</button>' +
-	'<ul id="comando-wrap" class="dropdown-menu centered"></ul>';
-$comandoMenu = $('<div id="comando-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
+	'<ul id="command2-wrap" class="dropdown-menu centered"></ul>';
+$commands2Menu = $('<div id="command2-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
 
-if (ComandoArray.length < 1) $comandoMenu.hide()
-else if (ComandoArray.length > 50) $comandoMenu.addClass('widecm');
+if (Commands2Array.length < 1) $commands2Menu.hide()
+else if (Commands2Array.length > 50) $command2Menu.addClass('widecm');
 
-var comando_arr = Object.keys(ComandoArray);
+var commands2_arr = Object.keys(Commands2Array);
 
-for (i in comando_arr) {
-	var c = comando_arr[i];
-	var j = comando_arr.length > 50 ? 8 : 1;
-	if (i % j == 0) var comandogroup = $('<li class="btn-group btn-comando" />').appendTo("#comando-wrap");
-	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'' + comando_arr[i] + '\')" />').appendTo(comandogroup).html(ComandoArray[c]);
+for (i in commands2_arr) {
+	var c = commands2_arr[i];
+	var j = commands2_arr.length > 50 ? 8 : 1;
+	if (i % j == 0) var commands2group = $('<li class="btn-group btn-commands2" />').appendTo("#commands2-wrap");
+	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'' + commands2_arr[i] + '\')" />').appendTo(commands2group).html(Commands2Array[c]);
 }
 
 // Chat control buttons group
-
+// チャット欄下の、お絵描きとかがあるところのボタン群
 var html = '<button id="notepad-btn" class="btn btn-sm btn-default btn-chatctrl" title="Notepad">' +
 	'<span class="glyphicon glyphicon-pencil"></span></button>' +
 	'<button id="sounds-btn" class="btn btn-sm btn-default btn-chatctrl" title="Chat sounds control">' +
@@ -2758,13 +2794,13 @@ var html = '<button id="notepad-btn" class="btn btn-sm btn-default btn-chatctrl"
 	'data-toggle="dropdown" title="Chat options"><span class="glyphicon glyphicon-cog"></span> ▴</button>' +
 	'<ul id="chatopts-menu" class="dropdown-menu dropdown-menu-right noclose"></ul></div>';
 $chatcontrols = $('<div id="chatcontrols" class="btn-group pull-right" />').appendTo("#leftcontrols").html(html);
-
+// 効果音を使わない場合はボタンを隠す
 if (!TEXTTOSPEECH && jQuery.isEmptyObject(SoundFiltersArray) && WelcomeSoundFileURL == "") $("#sounds-btn").hide();
 if (MUTECHAT) $("#sounds-btn").addClass('btn-danger');
 
 
 // Chat functions dropdown menu
-
+// チャット欄下のレンチ
 var html = '<li><a id="chat-f1">Premium Commands Help</a></li>' +
 	'<li class="divider"></li>' +
 	'<li><a id="chat-f2" class="opt"><span class="glyphicon glyphicon-ok"></span>Handy Emotes Panel</a></li>' +
@@ -2778,11 +2814,12 @@ var html = '<li><a id="chat-f1">Premium Commands Help</a></li>' +
 	'<li><a id="chat-f7">Clear Chat Window</a></li>' +
 	'<li class="divider"></li>';
 document.getElementById("chatfunc-menu").innerHTML = html;
-
+// ユーザー名にホバーしたときに出るプロフィールを大きくする設定を適用
 if (BIGPROFILES) {
 	$userlist.addClass('bigp');
 	$("#chat-f5").toggleClass('activated');
 }
+// カスタム通知音の設定の適用
 if (CUSTOMPING && CUSTOMPINGFILE != "") {
 	$("#chat-f6").addClass('activated');
 	CHATSOUND = new Audio(CUSTOMPINGFILE);
@@ -2791,7 +2828,7 @@ CHATSOUND.volume = CUSTOMPINGLVL;
 
 
 // Chat options dropdown menu
-
+// チャット欄右下の歯車
 var html = '<li group="1"><a id="chat-1" class="opt"><span class="glyphicon glyphicon-ok"></span>' +
 	'Convert Links to Images</a></li>' +
 	'<li group="1"><a id="chat-2" class="opt"><span class="glyphicon glyphicon-ok"></span>' +
@@ -2844,7 +2881,7 @@ var html = '<li group="1"><a id="chat-1" class="opt"><span class="glyphicon glyp
 	'<li group="2"><a id="chat-22" class="opt"><span class="glyphicon glyphicon-ok"></span>' +
 	'Bubbled Chat Messages</a></li>';
 document.getElementById("chatopts-menu").innerHTML = html;
-
+// 設定の適用
 if (SHOWIMAGES) $("#chat-1").addClass('activated');
 if (SHOWVIDEOS) $("#chat-2").addClass('activated');
 if (PLAYERTEXT) {
@@ -2909,7 +2946,7 @@ $("#chatopts-menu").find("li[group=2]").hide();
 
 
 // Filter playlist control panel
-
+// 投稿者名で動画を検索するやつ(歯車→投稿者名検索)
 var html = '<div class="vertical-spacer"></div><div class="input-group">' +
 	'<input class="form-control" id="plfilter" placeholder="Enter Username" type="text">' +
 	'<span class="input-group-btn"><button class="btn btn-default" id="filter_playlist" ' +
@@ -2923,7 +2960,7 @@ $plfiltercontrol = $('<div id="plfiltercontrol" class="col-lg-12 col-md-12 pl" /
 
 
 // Additional options control panel
-
+// 稲妻を押すと出てくるやつ
 var html = '<div class="well"><div class="btn-group">' +
 	'<button id="tools-btn" class="btn btn-sm btn-default" title="Premium Admin Tools">' +
 	'<span class="glyphicon glyphicon-tasks"></span> Tools</button>' +
@@ -2945,7 +2982,7 @@ if (!hasPermission("seeplaylist")) $("#jukebox-btn").attr('disabled', 'disabled'
 
 
 // Favourite Premium links control panel
-
+// お気に入り動画の登録機能
 var html = '<div class="vertical-spacer"></div><div class="centered">' +
 	'<button id="addtofav-btn" class="btn btn-default" title="Add to your Premium favourite links">' +
 	'<span class="glyphicon glyphicon-thumbs-up"></span> Add to favourite links</button>' +
@@ -2954,16 +2991,16 @@ $favscontrol = $('<div id="favscontrol" class="col-lg-12 col-md-12 pl" />').inse
 
 
 // Playlist container ID
-
+// queueの親にID付与
 $queue.parent().attr('id', 'queue-parent');
 
 // Show contributors (if enabled)
-
+// 設定に応じて投稿者名を表示
 if (SHOWCONTRIBS) contributorsNames("show");
 
 
 // Playlist labels
-
+// プレイリストの上端にあるボタン
 var html = LARGEPLAYER ? 'To player ▴' : 'To chat ▴';
 $scrollToChat = $('<span id="scroll-to-chat" class="label label-default pull-right pointer scroll-label" />')
 	.attr('title', 'Scroll to chat').appendTo($plmeta).html(html);
@@ -2974,7 +3011,7 @@ $expandPlaylist = $('<span id="expand-playlist" class="label label-default pull-
 $scrollToCurrent = $('<span id="scroll-to-current" class="label label-default pull-right pointer scroll-label" />')
 	.attr('title', 'Scroll playlist to current item').appendTo($plmeta)
 	.html('<span class="glyphicon glyphicon-arrow-up"></span>');
-
+// 設定の適用
 if (HIDEPLS) {
 	$hidePlaylist.addClass('label-danger').attr('title', 'Show playlist');
 	$queue.hide();
@@ -2986,7 +3023,7 @@ if (EXPANDPL) {
 
 
 // Custom HTML area (if enabled)
-
+// カスタムHTMLの領域
 if (EXECHTML && CUSTOMHTML != "") {
 	$customhtmlwrap = $('<div id="customhtmlwrap" class="col-lg-12 col-md-12 leftareas" />').html(CUSTOMHTML)
 		.insertBefore("#playlistmanagerwrap");
@@ -2995,7 +3032,7 @@ if (EXECHTML && CUSTOMHTML != "") {
 
 
 // Notepad panel
-
+// メモ帳
 var html = '<div id="notepad-well" class="well form-horizontal"><textarea id="note-area" class="form-control" ' +
 	'rows="12" placeholder="Personal notepad: write your notes here"></textarea>' +
 	'<div id="notesavewrap" class="text-center">' +
@@ -3007,7 +3044,7 @@ $("#note-area").val(getOrDefault('SP_notes_' + CLIENT.name, ''));
 
 
 // Avatars panel (if enabled)
-
+// 居るユーザーの画像を一覧にするやつ
 if (AVATARSLIST) {
 	createAvatarsPanel();
 	refreshAvatarsList();
@@ -3016,7 +3053,7 @@ if (AVATARSLIST) {
 
 
 // Synchtube Premium footer
-
+// Synchtubeを使っている場合ページ最下部に表示される項目
 var arr = VERSION.split(".");
 if (arr.length == 3) arr[2] = '<span class="smallfont">' + arr[2] + '</span>';
 VERSION = arr.join(".");
@@ -8271,8 +8308,7 @@ if (EMOTESCACHE) {
 	};
 })();
 
-//なぜかレイアウトメニューが出てこないことがあるので表示(CTV独自修正)
-$layoutMenu.css("display","inline")
+
 
 
 
