@@ -177,7 +177,9 @@ FactsArray = [];
 
 ImgurClientID = '3e7a1c3d1dda3fe';
 
-GiphyAPIKey = 'dc6zaTOxFJmzC';
+// 元のキーだとGETに失敗して403を吐いていたのでAPIキーを取得してみた　有効期間とか使える回数とかなんもわからん
+//GiphyAPIKey = 'dc6zaTOxFJmzC';
+GiphyAPIKey = "9Mir93CJPDef24rfi4IQ7pg77FsfCAAN"
 
 ExternalScriptURL = '';
 
@@ -1294,8 +1296,8 @@ function processLayoutElements() {
 		"chatcontrols": "#pollcontrols, #chatcontrols",
 		"pollemotebtns": "#newpollbtn, #emotelistbtn",
 		"colorsbtn": "#colors-btn",
-		"commondsbtn": "#commonds-btn",
-		"comandobtn": "#comando-btn",
+		"commands1btn": "#commands1-btn",
+		"commands2btn": "#commands2-btn",
 		"chatbtns": "#chatcontrols > button",
 		"chatmenus": "#chatcontrols > div",
 		"plmeta": "#plmeta",
@@ -2755,7 +2757,7 @@ var commands1_arr = Object.keys(Commands1Array);
 for (i in commands1_arr) {
 	var c = commands1_arr[i];
 	var j = commands1_arr.length > 50 ? 8 : 1;
-	if (i % j == 0) var commands1group = $('<li class="btn-group btn-commonds" />').appendTo("#commands1-wrap");//メモ: このifの必要性は何なのだろう
+	if (i % j == 0) var commands1group = $('<li class="btn-group btn-commands1" />').appendTo("#commands1-wrap");//メモ: このifの必要性は何なのだろう
 	$('<button class="btn btn-default btn-sm cbtn" onclick="insertText(\'[' + commands1_arr[i] + ']\')" />').appendTo(commands1group).html(Commands1Array[c]);
 }
 
@@ -2764,15 +2766,16 @@ for (i in commands1_arr) {
 // メモ: comando→commands2 と改名した
 var html = '<button id="commands2-btn" class="btn btn-sm btn-default btn-chatctrl dropdown-toggle" ' +
 	'data-toggle="dropdown" aria-expanded="false" title="コマンド2"><span class="glyphicon glyphicon-credit-card"></span> ▴</button>' +
-	'<ul id="command2-wrap" class="dropdown-menu centered"></ul>';
-$commands2Menu = $('<div id="command2-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
+	'<ul id="commands2-wrap" class="dropdown-menu centered"></ul>';
+$commands2Menu = $('<div id="commands2-menu" class="dropup btn-group" />').appendTo($pollcontrols).html(html);
 
 if (Commands2Array.length < 1) $commands2Menu.hide()
-else if (Commands2Array.length > 50) $command2Menu.addClass('widecm');
+else if (Commands2Array.length > 50) $commands2Menu.addClass('widecm');
 
 var commands2_arr = Object.keys(Commands2Array);
 
 for (i in commands2_arr) {
+	console.log(i);
 	var c = commands2_arr[i];
 	var j = commands2_arr.length > 50 ? 8 : 1;
 	if (i % j == 0) var commands2group = $('<li class="btn-group btn-commands2" />').appendTo("#commands2-wrap");
@@ -6173,6 +6176,7 @@ $("#notesave-btn").on("click", function () {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ちょっとした機能いろいろ
 
 // Improved window focus
 // source: "/www/js/ui.js" file
@@ -6189,7 +6193,7 @@ $(window).unbind("focus")
 
 // Improved implementation of emotes tab completion
 // source: "/www/js/tabcomplete.js" and "/www/js/ui.js" files
-
+// エモートなどのチャット補完　補完のモードが二つある
 CyTube.tabCompleteMethods['Longest unique match'] = function (input, position, options, context) {
 	var lower = input.toLowerCase();
 	var start;
@@ -6301,7 +6305,7 @@ CyTube.tabCompleteMethods['Cycle options'] = function (input, position, options,
 		newPosition: start + matches[0].length + 1
 	};
 };
-
+// ユーザー名、エモート名の補完の根幹っぽい
 function chatTabComplete() {
 	var chatline = document.getElementById("chatline");
 	var currentText = chatline.value;
@@ -6350,7 +6354,7 @@ function chatTabComplete() {
 
 
 // Chat message data buffer for commands answers
-
+// addChatMessage関数を別の変数に退避　メモ: このあと使うのかな？
 _dataBuffer = addChatMessage;
 addChatMessage = function (data) {
 	if (data.msg.indexOf('↳ ') == 0) {
@@ -6434,7 +6438,7 @@ function formatChatMessage(data, last) {
 			}
 		}
 	}
-	if (TEXTTOSPEECH) {
+	if (TEXTTOSPEECH) {// 発話する文字列を作って発話　コマンド部分などは削除
 		if (typeof TTSTHROTTLE === "undefined") TTSTHROTTLE = 0;
 		if (TTSTHROTTLE < 3) {
 			TTSTHROTTLE++;
@@ -6537,7 +6541,7 @@ function formatChatMessage(data, last) {
 
 
 // Chat commands answers
-
+// !をつけるコマンド
 function prepareMessage(msg) {
 	if (msg.indexOf('!') == 0) {
 		COMMAND = true;
@@ -6558,7 +6562,7 @@ function prepareMessage(msg) {
 				FORTUNE = true;
 			}
 		} else if (msg.indexOf('!gif ') == 0) {
-			var q = msg.split('!gif ')[1];
+			var q = msg.split('!gif ')[1];// !gif メモ: おそらくキーが死んでいる
 			if (GiphyAPIKey == "") GiphyAPIKey = 'dc6zaTOxFJmzC';
 			var url = 'https://api.giphy.com/v1/gifs/search?api_key=' + GiphyAPIKey + '&q=' +
 				encodeURIComponent(q);
@@ -6763,7 +6767,7 @@ function scrollChat() {
 
 
 // Handle messages sending
-
+// メッセージ送信時に必ず実行される関数　/付きのコマンドは送らずにコマンドの用途を実行
 function sendMessage() {
 	if (CHATTHROTTLE) return;
 	var msg = $chatline.val();
